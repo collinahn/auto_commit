@@ -50,6 +50,6 @@ $ sudo systemctl status {service name}
 ```
 * 자세한 상태 확인
 ```
-$ sudi journalclt -u {service name} -n {amount of log}
+$ sudi journalctl -u {service name} -n {amount of log}
 ```
 
