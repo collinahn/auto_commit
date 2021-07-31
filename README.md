@@ -8,10 +8,11 @@
 
 ### Environment
 * Ubuntu 18.04
-* systemd 서비스 등록하여 사용
+* systemd 서비스 등록
 
 ### Prerequisite
 * bash shell
+* gcc version 8.3.0
 
 ### Files
 * auto_commit.sh
@@ -19,6 +20,17 @@
   * 작업을 완료했으면 날짜가 넘어갈 때 까지 쉰다.  
 
 ### Usage
+
+* getNextDay.c 컴파일
+```
+$ gcc -o getNextDayExe -fPIC -Wall getNextDay.c
+```
+* 단독으로 디버깅하려면(단독 실행 아닐경우 플래그 빼고 컴파일 필요)
+```
+$ gcc -o getNextDayExe -fPIC -Wall getNextDay.c -D_DEBUG_
+```
+
+* 서비스 등록
 ```
 $ sudo vi /etc/systemd/system/{servicename}.service
 ```
@@ -53,3 +65,9 @@ $ sudo systemctl status {service name}
 $ sudo journalctl -u {service name} -n {amount of log}
 ```
 
+
+### Update Log
+* 2021.07.30
+  * 생성
+* 2021.07.31
+  * 달이 넘어갈 때 기존의 방식으로는 정상 동작하지 않아서 날을 계산하는 프로그램 추가 
