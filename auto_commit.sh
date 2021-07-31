@@ -9,6 +9,40 @@ function Update_Time() {
     echo "next commit >> ${RAND_NUM_HOUR}:${RAND_NUM_MIN}"
 }
 
+function Wait_Until_Tomorrow() {
+    PWD=`pwd`
+
+    CURRENT_DATE=$(date +"%Y%m%d")                   #20210728
+    NEXT_DATE=`${PWD}/getNextDayExe ${CURRENT_DATE}` #20210728
+
+    CURRENT_DATE=$(date +"%Y%m%d %H:%M:%S")          #20210728 23:58:00
+    CURRENT_DATE_STD=`date -d "${CURRENT_DATE}" "+%s"` 
+    NEXT_DATE_STD=`date -d "${NEXT_DATE} 00:00:00" "+%s"`
+
+    DIFF_SEC=`expr ${NEXT_DATE_STD} "-" ${CURRENT_DATE_STD}`
+
+    echo "sleeping $DIFF_SEC"
+    sleep ${DIFF_SEC}s
+}
+
+function Git_Commit() {
+        TARGET_MSG="created $(date +"%b %d %Y %H:%M:%S") by auto_commit.sh"
+        TARGET_FILE="files/$(date +"%Y-%m-%d_%H:%M:%S").sh"
+        
+        touch ${TARGET_FILE}
+        echo "#!/bin/bash" >> ${TARGET_FILE}
+        echo "" >> ${TARGET_FILE}
+        echo "${TARGET_MSG}" >> ${TARGET_FILE}
+
+        git add ${TARGET_FILE}
+        sleep 5s
+
+        git commit -m "automated commit, ${TARGET_FILE}"
+        sleep 5s
+
+        git push
+}
+
 RAND_NUM_HOUR=0
 RAND_NUM_MIN=0
 
@@ -25,35 +59,11 @@ do
 
         echo "${CURRENT_HOUR}:${CURRENT_MIN} commit start"
 
-        TARGET_MSG="created $(date +"%b %d %Y %H:%M:%S") by commit_everyday.sh"
-        TARGET_FILE="files/$(date +"%Y-%m-%d_%H:%M:%S").sh"
-        
-        touch ${TARGET_FILE}
-        echo "#!/bin/bash" >> ${TARGET_FILE}
-        echo "" >> ${TARGET_FILE}
-        echo "# created ${CURRENT_HOUR}:${CURRENT_MIN}" >> ${TARGET_FILE} 
-
-        git add ${TARGET_FILE}
-        sleep 5s
-
-        git commit -m "automated commit, ${TARGET_FILE}"
-        sleep 5s
-
-        git push
-
-        CURRENT_DATE=$(date +"%Y%m%d")    #20210728
-        NEXT_DATE=`expr ${CURRENT_DATE} "+" 1`
-
-        CURRENT_DATE=$(date +"%Y%m%d %H:%M:%S") #20210728 23:58:00
-        CURRENT_DATE_STD=`date -d "${CURRENT_DATE}" "+%s"` 
-
-        NEXT_DATE_STD=`date -d "${NEXT_DATE} 00:00:00" "+%s"`
-
-        DIFF_SEC=`expr ${NEXT_DATE_STD} "-" ${CURRENT_DATE_STD}`
-
-        echo "sleeping $DIFF_SEC"
-        sleep ${DIFF_SEC}s
-
+        #파일을 만들고 커밋한다
+        Git_Commit
+        #다음 날까지 기다린다
+        Wait_Until_Tomorrow
+        #기준 시간을 랜덤하게 업데이트한다
         Update_Time
     fi
 
