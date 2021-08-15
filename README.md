@@ -65,9 +65,39 @@ $ sudo systemctl status {service name}
 $ sudo journalctl -u {service name} -n {amount of log}
 ```
 
+* git remote repository에 ssh로 인증하는 방법)
+  * 1. ssh-gen으로 공개 키를 만든다
+  ```
+  $ ssh-keygen -C "email@address" -t rsa -b 4096 -f git_rsa
+  ```
+
+  * 2. git 계정에 등록한다
+  * 3. remote저장소 업데이트
+  ```
+  $ git remote rm origin
+  $ git config --global remote.origin.url git@github.com:~(주소)
+  $ git push --set-upstream origin main
+  ```
+
+
+* 아래와 같은 에러가 있을 시 해결 방안과 같이 해결:
+```
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+```
+
+* 해결 방안)
+```
+$ eval $(ssh-agent)
+$ ssh-add ~/.ssh/git_rsa
+```
+
 
 ### Update Log
 * 2021.07.30
   * 생성
 * 2021.07.31
-  * 달이 넘어갈 때 기존의 방식으로는 정상 동작하지 않아서 날을 계산하는 프로그램 추가 
+  * 달이 넘어갈 때 기존의 방식으로는 정상 동작하지 않아 날을 계산하는 프로그램 추가 
