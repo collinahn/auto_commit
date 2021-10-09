@@ -3,7 +3,7 @@
 
 ### Description
 * 자동으로 파일을 생성해 랜덤한 시간에 하루 한 번 커밋하는 bash shell scrpit.
-* 1일 1커밋이 유행이라길래 [다른 계정](https://github.com/collinahn01)에 시험해보려고 만들었다.
+* 1일 1커밋이 유행이라길래 [다른 계정](https://github.com/collinahn01)에 시험해보려고 만들었다. (현재는 중단됨)
 * (상시 동작하는 서버가 필요함)
 
 ### Environment
